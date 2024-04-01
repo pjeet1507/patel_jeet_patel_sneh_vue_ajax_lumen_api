@@ -12,9 +12,6 @@
 </head>
 <body>
 <div id="app">
-  <!-- Display error message if any -->
-  <div v-if="hasError" class="error">{{ errorMessage }}</div>
-
   <!-- Studios Section -->
   <div class="studios-section">
     <h2>Studios</h2>
@@ -26,8 +23,8 @@
     </ul>
   </div>
 
-  <!-- Games Section -->
-  <div v-if="isFetchingGames" class="loading">Loading games...</div>
+  <!-- Games Section: Displayed when a studio is selected -->
+  <div v-if="isFetchingGames" class="loading">Loading...</div>
   <div v-else-if="games.length > 0" class="games-section">
     <h2>Games Published by {{ selectedStudioName }}</h2>
     <div class="games-container">
@@ -37,15 +34,38 @@
           <h3>{{ game.name }}</h3>
           <div class="game-rating">Rating: {{ game.rating }}</div>
           <div class="game-platforms">
-            <!-- Loop through platforms and display icons -->
-              <img v-for="platform in game.platforms" :src="getPlatformIcon(platform.name)" :alt="platform.name" class="platform-icon">
+            <img v-for="platform in game.platforms" :src="platform.icon" :alt="platform.name" class="platform-icon">
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div v-else class="no-games">No games found for {{ selectedStudioName }}</div>
+ <div v-if="hasError && selectedStudioName" class="no-games">No games found for {{ selectedStudioName }}</div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <input type="text" v-model="searchQuery" placeholder="Search for games..." />
+    <button @click="searchGames">Search</button>
+  </div>
+
+  <div v-if="searchResults.length > 0" class="games-section">
+  <h2>Search Results</h2>
+  <div class="games-container">
+    <div v-for="game in searchResults" :key="game.id" class="game-card">
+      <img :src="game.image" :alt="game.name" class="game-image">
+      <div class="game-info">
+        <h3>{{ game.name }}</h3>
+        <div class="game-rating">Rating: {{ game.rating }}</div>
+        <div class="game-platforms">
+          <img v-for="platform in game.platforms" :src="platform.icon" :alt="platform.name" class="platform-icon">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<div v-else-if="searchQuery !== '' && !isFetchingGames" class="no-games">No search results found.</div>
+</div>
+
 
 
 </body>
