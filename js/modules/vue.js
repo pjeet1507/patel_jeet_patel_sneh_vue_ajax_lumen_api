@@ -1,4 +1,4 @@
-export function vue() {
+export function vue () {
   const { createApp } = Vue.createApp({
     created() {
       this.fetchStudios();
@@ -7,12 +7,15 @@ export function vue() {
     data() {
       return {
         studiosInfo: [],
-        games: [],
+        games: [], // Games fetched by selecting a studio
+        searchResults: [], // Separate list for search results
         selectedStudioName: "",
-        apiKey: "37e811b2cefd45699791ad049f48fb13", // add the provided API key in this field
+        apiKey: "f9b9140095bf4e35a1c427fb3bfb4f11",
         isFetchingGames: false,
         hasError: false,
         errorMessage: "",
+        searchQuery: "",
+
       };
     },
 
@@ -36,7 +39,6 @@ export function vue() {
           "Xbox One": "images/icons/xbox.svg",
           PC: "images/icons/pc.svg",
           "Nintendo Switch": "images/icons/switch.svg",
-          // Add more platforms and their icons here
         };
         return platformIconMap[platformName] || "images/icons/default.svg";
       },
@@ -71,13 +73,56 @@ export function vue() {
               this.hasError = true;
               this.errorMessage = "No games found for this publisher.";
             }
+            this.isFetchingGames = false;
           })
           .catch((error) => {
             console.error("Fetch error:", error);
             this.hasError = true;
             this.errorMessage = "There was a problem fetching the games.";
+            this.isFetchingGames = false;
+          });
+      },
+
+      searchGames() {
+        const query = this.searchQuery.replace(/\s+/g, "-").toLowerCase();
+        this.isFetchingGames = true;
+        this.searchResults = [];
+        this.hasError = false;
+        this.errorMessage = "";
+
+        fetch(
+          `https://api.rawg.io/api/games?search=${query}&key=${this.apiKey}`
+
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.results.length > 0) {
+              const filteredGames = data.results.filter(
+                (game) => game.reviews_count > 1000
+              );
+              this.searchResults = filteredGames.map((game) => ({
+
+                id: game.id || "Not available",
+                name: game.name || "Not available",
+                image: game.background_image || "Not available",
+                rating: game.rating ? game.rating.toString() : "Not available",
+                platforms:
+                  game.platforms.map((platform) => ({
+                    name: platform.platform.name,
+                    icon: this.getPlatformIcon(platform.platform.name),
+                  })) || [],
+              }));
+            } else {
+              this.hasError = true;
+              this.errorMessage = "No games found for the search query.";
+            }
+            this.isFetchingGames = false;
           })
-          .finally(() => {
+          .catch((error) => {
+            console.error("Search error:", error);
+            this.hasError = true;
+            this.errorMessage = "There was a problem searching for games.";
+
             this.isFetchingGames = false;
           });
       },
@@ -88,4 +133,6 @@ export function vue() {
       },
     },
   }).mount("#app");
-}
+
+    }
+
