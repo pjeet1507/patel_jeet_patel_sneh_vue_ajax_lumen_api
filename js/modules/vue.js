@@ -21,7 +21,7 @@ export function vue () {
 
     methods: {
       fetchStudios() {
-        fetch("http://localhost/game-db/public/Studio")
+        fetch("http://localhost/game-luman/public/Studio")
           .then((res) => res.json())
           .then((data) => {
             this.studiosInfo = data;
