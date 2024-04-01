@@ -16,6 +16,8 @@ main {
   font-family: "Arial", sans-serif;
   margin: 0 auto;
   padding: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+
 }
 
 span {
@@ -100,8 +102,10 @@ span {
     flex-wrap: wrap;
     justify-content: center;
 
-    .game-card {
-      width: 200px;
+    .card {
+      min-width: 250px;
+      width: 20%;
+      aspect-ratio: 3/4;
       margin: 10px;
       background-color: rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(10px);
@@ -115,12 +119,12 @@ span {
         transform: translateY(-5px);
         backdrop-filter: blur(15px);
 
-        .game-image {
+        .image {
           transform: scale(1.2);
         }
       }
 
-      .game-image {
+      .image {
         width: 100%;
         height: 120px;
         object-fit: cover;
@@ -128,7 +132,7 @@ span {
 
       }
 
-      .game-info {
+      .info {
         padding: 10px;
 
         h4 {
@@ -137,10 +141,14 @@ span {
           margin-bottom: 10px;
         }
 
-        .game-rating {
+        .rating {
           font-size: 14px;
-          color: #888;
-          margin-bottom: 5px;
+          margin-bottom: 10px;
+          margin-top: 10px;
+
+          span {
+            color: rgb(211, 211, 211);
+          }
         }
 
         .platform-icon {
@@ -158,4 +166,10 @@ span {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.platforms {
+  p {
+    padding-top: 30px;
+  }
 }

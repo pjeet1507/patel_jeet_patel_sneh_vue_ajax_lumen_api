@@ -1,4 +1,4 @@
-export function vue () {
+export function vue() {
   const { createApp } = Vue.createApp({
     created() {
       this.fetchStudios();
@@ -10,12 +10,11 @@ export function vue () {
         games: [], // Games fetched by selecting a studio
         searchResults: [], // Separate list for search results
         selectedStudioName: "",
-        apiKey: "f9b9140095bf4e35a1c427fb3bfb4f11",
+        apiKey: "37e811b2cefd45699791ad049f48fb13",
         isFetchingGames: false,
         hasError: false,
         errorMessage: "",
         searchQuery: "",
-
       };
     },
 
@@ -35,9 +34,18 @@ export function vue () {
 
       getPlatformIcon(platformName) {
         const platformIconMap = {
-          "PlayStation 4": "images/icons/ps4.svg",
           "Xbox One": "images/icons/xbox.svg",
+          "Xbox 360": "images/icons/xbox.svg",
+          "Xbox Series S/X": "images/icons/xbox.svg",
+          "PlayStation 5": "images/icons/ps4.svg",
+          "PlayStation 4": "images/icons/ps4.svg",
+          "PlayStation 3": "images/icons/ps4.svg",
+          "PS Vita": "images/icons/ps4.svg",
+          macOS: "images/icons/IOS.svg",
           PC: "images/icons/pc.svg",
+          iOS: "images/icons/IOS.svg",
+          Linux: "images/icons/Linux.svg",
+          Android: "images/icons/Android.svg",
           "Nintendo Switch": "images/icons/switch.svg",
         };
         return platformIconMap[platformName] || "images/icons/default.svg";
@@ -92,7 +100,6 @@ export function vue () {
 
         fetch(
           `https://api.rawg.io/api/games?search=${query}&key=${this.apiKey}`
-
         )
           .then((res) => res.json())
           .then((data) => {
@@ -101,7 +108,6 @@ export function vue () {
                 (game) => game.reviews_count > 1000
               );
               this.searchResults = filteredGames.map((game) => ({
-
                 id: game.id || "Not available",
                 name: game.name || "Not available",
                 image: game.background_image || "Not available",
@@ -132,7 +138,24 @@ export function vue () {
         this.fetchGamesByPublisher(studio.name);
       },
     },
+    mounted() {
+      gsap.from(".title-text", {
+        opacity: 0,
+        y: "100%",
+        duration: 1.5,
+        stagger: 0.5,
+        ease: "power4.out",
+        onComplete: function () {},
+      });
+
+      gsap.from(".card", {
+        opacity: 0,
+        y: "100%",
+        duration: 1,
+        stagger: 0.2, // Adjust the stagger value as needed
+        ease: "power4.out",
+        onComplete: function () {},
+      });
+    },
   }).mount("#app");
-
-    }
-
+}
