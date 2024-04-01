@@ -15,12 +15,13 @@ export function vue () {
         hasError: false,
         errorMessage: "",
         searchQuery: "",
+
       };
     },
 
     methods: {
       fetchStudios() {
-        fetch("http://localhost:8888/game-db/public/Studio")
+        fetch("http://localhost/game-db/public/Studio")
           .then((res) => res.json())
           .then((data) => {
             this.studiosInfo = data;
@@ -38,7 +39,6 @@ export function vue () {
           "Xbox One": "images/icons/xbox.svg",
           PC: "images/icons/pc.svg",
           "Nintendo Switch": "images/icons/switch.svg",
-          // Add more mappings as needed
         };
         return platformIconMap[platformName] || "images/icons/default.svg";
       },
@@ -92,6 +92,7 @@ export function vue () {
 
         fetch(
           `https://api.rawg.io/api/games?search=${query}&key=${this.apiKey}`
+
         )
           .then((res) => res.json())
           .then((data) => {
@@ -100,6 +101,7 @@ export function vue () {
                 (game) => game.reviews_count > 1000
               );
               this.searchResults = filteredGames.map((game) => ({
+
                 id: game.id || "Not available",
                 name: game.name || "Not available",
                 image: game.background_image || "Not available",
@@ -120,6 +122,7 @@ export function vue () {
             console.error("Search error:", error);
             this.hasError = true;
             this.errorMessage = "There was a problem searching for games.";
+
             this.isFetchingGames = false;
           });
       },
@@ -132,3 +135,4 @@ export function vue () {
   }).mount("#app");
 
     }
+
